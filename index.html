@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deepak Sai Are — Software &amp; ML Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1C;
+    --bg-2:#0D1426;
+    --surface: rgba(255,255,255,0.045);
+    --surface-hi: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.09);
+    --border-hi: rgba(255,255,255,0.18);
+    --text:#E9EDF7;
+    --text-dim:#8D97AC;
+    --text-faint:#5A6379;
+    --cyan:#5EEAD4;
+    --violet:#8B7CF6;
+    --amber:#FFB454;
+    --display: 'Sora', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background: var(--violet); color:#fff; }
+
+  .wrap{ max-width: 1040px; margin:0 auto; padding: 0 28px; }
+
+  .aurora{
+    position: fixed; inset: 0; z-index: -1; overflow: hidden; background: var(--bg);
+  }
+  .aurora::before, .aurora::after{
+    content:""; position:absolute; width: 60vw; height: 60vw; border-radius: 50%;
+    filter: blur(110px); opacity: 0.28;
+  }
+  .aurora::before{
+    background: radial-gradient(circle, var(--cyan), transparent 70%);
+    top: -20vw; left: -10vw;
+    animation: drift1 22s ease-in-out infinite alternate;
+  }
+  .aurora::after{
+    background: radial-gradient(circle, var(--violet), transparent 70%);
+    bottom: -25vw; right: -15vw;
+    animation: drift2 26s ease-in-out infinite alternate;
+  }
+  @keyframes drift1{ to{ transform: translate(8vw, 6vw) scale(1.1); } }
+  @keyframes drift2{ to{ transform: translate(-6vw, -8vw) scale(1.15); } }
+  @media (prefers-reduced-motion: reduce){
+    .aurora::before, .aurora::after{ animation:none; }
+  }
+
+  .grid-overlay{
+    position: fixed; inset:0; z-index:-1;
+    background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+  }
+
+  header.nav{
+    position: sticky; top:0; z-index: 100;
+    backdrop-filter: blur(14px) saturate(140%);
+    background: rgba(10,15,28,0.55);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner{
+    max-width: 1040px; margin:0 auto; padding: 16px 28px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .nav-logo{ font-family: var(--display); font-weight:700; font-size:1rem; letter-spacing:-0.01em; }
+  .nav-logo .dot{ color: var(--cyan); }
+  nav.links{ display:flex; gap: 28px; font-size: 0.86rem; color: var(--text-dim); }
+  nav.links a{ position:relative; transition: color .2s; }
+  nav.links a:hover{ color: var(--text); }
+  nav.links a::after{
+    content:""; position:absolute; left:0; bottom:-4px; width:0; height:1px;
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    transition: width .25s ease;
+  }
+  nav.links a:hover::after{ width:100%; }
+  @media (max-width:680px){ nav.links{ display:none; } }
+
+  .hero{ padding: 110px 0 60px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family: var(--mono); font-size: 0.74rem; color: var(--cyan);
+    background: rgba(94,234,212,0.08); border:1px solid rgba(94,234,212,0.25);
+    padding: 6px 14px; border-radius: 999px; margin-bottom: 26px;
+  }
+  .badge .pulse{
+    width:6px; height:6px; border-radius:50%; background: var(--cyan);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(94,234,212,0.55); }
+    70%{ box-shadow:0 0 0 8px rgba(94,234,212,0); }
+    100%{ box-shadow:0 0 0 0 rgba(94,234,212,0); }
+  }
+
+  h1.hero-title{
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 4.1rem);
+    line-height: 1.05; letter-spacing:-0.02em;
+    max-width: 15ch;
+  }
+  .gradient-text{
+    background: linear-gradient(100deg, var(--cyan), var(--violet) 60%, var(--amber));
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip:text; color:transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer{ to{ background-position: 200% center; } }
+
+  .hero-sub{ margin-top: 22px; max-width: 58ch; font-size: 1.08rem; color: var(--text-dim); }
+  .hero-sub b{ color: var(--text); font-weight:600; }
+
+  .cursor-blink{
+    display:inline-block; width: 3px; height: 0.85em; background: var(--cyan);
+    margin-left: 4px; vertical-align: -0.1em;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .spotlight{
+    position: fixed; inset:0; z-index: 5; pointer-events:none;
+    background: radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(94,234,212,0.06), transparent 70%);
+    transition: background .1s ease;
+  }
+  @media (max-width:680px){ .spotlight{ display:none; } }
+
+  .hero-actions{ margin-top: 32px; display:flex; flex-wrap:wrap; gap: 12px; }
+  .btn{
+    font-family: var(--mono); font-size: 0.82rem;
+    padding: 11px 20px; border-radius: 10px;
+    display:inline-flex; align-items:center; gap:8px;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    border: 1px solid var(--border-hi);
+  }
+  .btn.primary{
+    background: linear-gradient(120deg, var(--cyan), var(--violet));
+    color: #06111C; font-weight:600; border:none;
+  }
+  .btn.primary:hover{ transform: translateY(-2px); filter: brightness(1.08); }
+  .btn.ghost{ background: var(--surface); color: var(--text); }
+  .btn.ghost:hover{ background: var(--surface-hi); transform: translateY(-2px); }
+
+  .stats{
+    margin-top: 56px;
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 14px; overflow:hidden;
+  }
+  .stat{ background: var(--bg-2); padding: 20px 18px; text-align:left; }
+  .stat-num{ font-family: var(--display); font-weight:700; font-size: 1.7rem; color: var(--text); }
+  .stat-label{ font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); text-transform:uppercase; letter-spacing:.06em; margin-top:4px; }
+  @media (max-width:680px){ .stats{ grid-template-columns: repeat(2,1fr); } }
+
+  section{ padding: 70px 0; border-top: 1px solid var(--border); }
+  .sec-head{ margin-bottom: 34px; }
+  .sec-eyebrow{ font-family: var(--mono); font-size: 0.74rem; color: var(--cyan); text-transform:uppercase; letter-spacing:.1em; margin-bottom: 10px; }
+  .sec-title{ font-family: var(--display); font-weight:700; font-size: 1.9rem; letter-spacing:-0.01em; }
+
+  .reveal{ opacity:0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  .skill-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 14px; }
+  .skill-card{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px; transition: border-color .2s, transform .2s, background .2s;
+  }
+  .skill-card:hover{ border-color: var(--border-hi); background: var(--surface-hi); transform: translateY(-3px); }
+  .skill-card h4{ font-family: var(--mono); font-size: 0.72rem; color: var(--violet); text-transform:uppercase; letter-spacing:.07em; margin-bottom:12px; }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:7px; }
+  .skill-tags span{
+    font-size: 0.78rem; color: var(--text-dim);
+    background: rgba(255,255,255,0.04); border:1px solid var(--border);
+    padding: 5px 10px; border-radius: 7px;
+  }
+
+  .summary-card{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 30px 32px; position:relative; overflow:hidden;
+    font-size: 1.02rem; color: var(--text-dim); display:grid; gap: 16px;
+  }
+  .summary-card::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background: linear-gradient(180deg, var(--amber), var(--cyan));
+  }
+  .summary-card b{ color: var(--text); font-weight:600; }
+  .stat-inline{
+    font-family: var(--mono); font-weight:600;
+    background: linear-gradient(100deg, var(--cyan), var(--violet));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  .xp-card{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; position:relative; overflow:hidden;
+  }
+  .xp-card::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background: linear-gradient(180deg, var(--cyan), var(--violet));
+  }
+  .xp-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
+  .xp-role{ font-family: var(--display); font-weight:600; font-size: 1.2rem; }
+  .xp-org{ color: var(--text-dim); margin-bottom: 18px; }
+  .xp-date{ font-family: var(--mono); font-size: 0.76rem; color: var(--text-faint); }
+  .xp-card ul{ padding-left: 20px; display:grid; gap: 10px; }
+  .xp-card li{ font-size: 0.95rem; color: var(--text-dim); }
+  .xp-card li b{ color: var(--text); font-weight:600; }
+
+  .proj-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(290px,1fr)); gap: 18px; }
+  .proj-card{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px; display:flex; flex-direction:column; gap: 14px;
+    transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .proj-card:hover{ border-color: var(--border-hi); background: var(--surface-hi); }
+
+  .proj-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .proj-title{ font-family: var(--display); font-weight:600; font-size: 1.02rem; line-height:1.3; }
+  .proj-tag{ font-family: var(--mono); font-size: 0.64rem; text-transform:uppercase; letter-spacing:.06em; padding: 4px 9px; border-radius: 999px; white-space:nowrap; }
+  .tag-ml{ background: rgba(255,180,84,0.1); color: var(--amber); border:1px solid rgba(255,180,84,0.3); }
+  .tag-sde{ background: rgba(94,234,212,0.1); color: var(--cyan); border:1px solid rgba(94,234,212,0.3); }
+
+  .proj-metric{ font-family: var(--display); font-size: 1.7rem; font-weight:700;
+    background: linear-gradient(100deg, var(--cyan), var(--violet));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .proj-metric-label{ font-family: var(--mono); font-size: 0.66rem; color: var(--text-faint); text-transform:uppercase; letter-spacing:.05em; margin-top:2px; }
+  .proj-desc{ font-size: 0.88rem; color: var(--text-dim); flex:1; }
+  .proj-foot{ display:flex; justify-content:space-between; align-items:center; padding-top: 6px; border-top: 1px solid var(--border); }
+  .proj-link{ font-family: var(--mono); font-size: 0.74rem; color: var(--cyan); display:inline-flex; align-items:center; gap:5px; transition: gap .2s; }
+  .proj-link:hover{ gap: 8px; }
+  .proj-link.disabled{ color: var(--text-faint); }
+  .proj-date{ font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); }
+
+  .edu-card{ background: var(--surface); border:1px solid var(--border); border-radius:16px; padding: 26px; }
+  .edu-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .edu-school{ font-family: var(--display); font-weight:600; font-size:1.1rem; }
+  .edu-meta{ color: var(--text-dim); font-size: 0.92rem; margin-top:2px; }
+  .edu-date{ font-family: var(--mono); font-size: 0.76rem; color: var(--text-faint); }
+
+  .cert-list{ margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border); display:grid; gap: 10px; }
+  .cert-list li{ list-style:none; font-size: 0.88rem; color: var(--text-dim); padding-left: 20px; position:relative; }
+  .cert-list li::before{ content:"✦"; position:absolute; left:0; top:0; color: var(--violet); font-size:0.75rem; }
+
+  footer{ padding: 60px 0 70px; text-align:center; }
+  .foot-cta{ font-family: var(--display); font-weight:700; font-size: 1.6rem; margin-bottom: 22px; }
+  .foot-links{ display:flex; justify-content:center; gap: 16px; flex-wrap:wrap; }
+  .foot-note{ margin-top: 34px; font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); }
+
+  :focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="aurora"></div>
+<div class="grid-overlay"></div>
+<div class="spotlight" id="spotlight"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">D<span class="dot">.</span>SAI ARE</div>
+    <nav class="links">
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="badge"><span class="pulse"></span> Open to Software &amp; AI/ML Engineer roles</div>
+    <h1 class="hero-title">I build the <span class="gradient-text">signal</span> and the system that carries it.<span class="cursor-blink"></span></h1>
+    <p class="hero-sub">
+      Backend engineer with production experience in <b>Java, Spring Boot, and AWS</b>,
+      and applied ML work spanning <b>LSTM sequence models, spiking neural networks,
+      Bayesian reasoning, and RAG pipelines</b>. MS Computer Science candidate at Rutgers University.
+    </p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#projects">View Projects →</a>
+      <a class="btn ghost" href="mailto:deepaksai373@gmail.com">Email Me</a>
+      <a class="btn ghost" href="tel:+12015265561">+1 201-526-5561</a>
+      <a class="btn ghost" href="https://linkedin.com/in/deepak-sai-are-5b2bb31a0" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost" href="https://github.com/DeepakChowdary9999" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <div class="stats reveal">
+      <div class="stat"><div class="stat-num" data-count="9">0</div><div class="stat-label">Projects Shipped</div></div>
+      <div class="stat"><div class="stat-num" data-count="96">0</div><div class="stat-label">% Peak Model Accuracy</div></div>
+      <div class="stat"><div class="stat-num" data-count="30">0</div><div class="stat-label">% Query Time Cut</div></div>
+      <div class="stat"><div class="stat-num" data-count="2">0</div><div class="stat-label">Yrs Backend Experience</div></div>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">About</div>
+      <h2 class="sec-title">Summary</h2>
+    </div>
+    <div class="summary-card reveal">
+      <p>Software engineer who builds <b>both sides</b> of AI systems: the backend infrastructure that runs them and the models that power them. Production experience with <b>Java/Spring Boot APIs</b>, secure <b>AWS deployments</b>, and optimized SQL — <span class="stat-inline">25%</span> faster response times, <span class="stat-inline">30%</span> faster queries — pairs with hands-on ML work spanning <b>LSTM sequence modeling</b>, <b>spiking neural networks</b>, <b>Bayesian/MDP reasoning</b>, and <b>RAG pipelines</b>, including an AWS award-winning AI evaluation system with <span class="stat-inline">96%</span> rubric-aligned accuracy.</p>
+      <p>Currently pursuing an MS in Computer Science at Rutgers University, looking to bring that full-stack engineering-plus-ML combination to a team shipping reliable, production-grade AI software.</p>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Toolkit</div>
+      <h2 class="sec-title">Skills</h2>
+    </div>
+    <div class="skill-grid reveal">
+      <div class="skill-card">
+        <h4>Languages</h4>
+        <div class="skill-tags"><span>Python</span><span>Java</span><span>JavaScript</span><span>SQL</span><span>HTML</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Backend &amp; Frameworks</h4>
+        <div class="skill-tags"><span>Spring Boot</span><span>Spring Data JPA</span><span>Jakarta EE</span><span>Django</span><span>REST APIs</span><span>Microservices</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Databases</h4>
+        <div class="skill-tags"><span>MySQL</span><span>PostgreSQL</span><span>Oracle</span><span>ChromaDB</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Security &amp; Testing</h4>
+        <div class="skill-tags"><span>BCrypt</span><span>AES-256</span><span>RBAC</span><span>JUnit</span><span>Postman</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Cloud &amp; DevOps</h4>
+        <div class="skill-tags"><span>AWS EC2</span><span>VPC</span><span>Route 53</span><span>CI/CD</span><span>Git</span><span>Docker</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>AI / ML</h4>
+        <div class="skill-tags"><span>PyTorch</span><span>TensorFlow</span><span>LSTM</span><span>Bayesian Reasoning</span><span>MDP / RL</span><span>GeoPandas</span><span>LLM Pipelines</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Track Record</div>
+      <h2 class="sec-title">Experience</h2>
+    </div>
+    <div class="xp-card reveal">
+      <div class="xp-top">
+        <div>
+          <div class="xp-role">Software Development Engineer</div>
+          <div class="xp-org">Right Angle Solutions — Hyderabad, India</div>
+        </div>
+        <div class="xp-date">JAN 2022 — DEC 2023</div>
+      </div>
+      <ul>
+        <li>Designed and implemented <b>RESTful APIs</b> in Java/Jakarta EE using DAO patterns to decouple business logic, cutting response time <b>25%</b>.</li>
+        <li>Engineered normalized <b>MySQL schemas</b> and optimized queries across 5+ relational entities, reducing query execution time <b>30%</b>.</li>
+        <li>Secured sensitive user data with <b>AES-256 encryption</b> and BCryptPasswordEncoder password hashing, cutting login-related bugs <b>15%</b>.</li>
+        <li>Built <b>Spring Boot APIs</b> for authentication, event management, and automated email notifications (JavaMailSender), improving notification delivery reliability.</li>
+        <li>Developed a multi-role backend with <b>Django's auth framework</b> and custom role-based access control across three user types, decreasing unauthorized access attempts.</li>
+        <li>Built a scheduling system with server-side validation and <b>AJAX-driven async calls</b> on PostgreSQL, lowering scheduling errors.</li>
+        <li>Architected secure <b>AWS infrastructure</b> — VPC with public/private subnets, NAT Gateway, and scoped Security Groups — meeting compliance requirements.</li>
+        <li>Deployed a Java web app on <b>EC2 + Apache Tomcat</b>, configured Route 53 DNS, and hardened MySQL in a private subnet for reliable, isolated availability.</li>
+        <li>Strengthened API reliability with <b>JUnit</b> test coverage for critical services and enforced <b>CORS</b> policies for secure cross-origin communication.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Selected Work</div>
+      <h2 class="sec-title">Projects</h2>
+    </div>
+
+    <div class="proj-grid reveal">
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Medscor AI — Full-Stack AI Evaluation System</div>
+          <span class="proj-tag tag-ml">ML</span>
+        </div>
+        <div>
+          <div class="proj-metric">96%</div>
+          <div class="proj-metric-label">Rubric-Aligned Accuracy · AWS Award-Winning</div>
+        </div>
+        <div class="proj-desc">5-stage pipeline — transcription, retrieval, rubric generation, scoring, fairness validation — for grading medical H&amp;P presentations. Built the CKD methodology to surface reasoning gaps, cutting faculty review time ~70%.</div>
+        <div class="proj-foot">
+          <span class="proj-link disabled">Private repo</span>
+          <span class="proj-date">OCT 2025</span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Predicting Gamer Churn — LSTM on League of Legends Data</div>
+          <span class="proj-tag tag-ml">ML</span>
+        </div>
+        <div>
+          <div class="proj-metric">98.97%</div>
+          <div class="proj-metric-label">Accuracy · 98.36% F1</div>
+        </div>
+        <div class="proj-desc">Riot API pipeline → cleaning → feature extraction → Bidirectional LSTM. Identified win/loss ratio and champion diversity as top churn predictors via statistical testing.</div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/Predicting-Gamer-churn-LSTM-Based-Analysis-on-League-of-Legends-Data-main" target="_blank" rel="noopener">View code →</a>
+          <span class="proj-date">DEC 2024</span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Neuromorphic Deepfake Audio Detection</div>
+          <span class="proj-tag tag-ml">ML</span>
+        </div>
+        <div>
+          <div class="proj-metric">CSNN</div>
+          <div class="proj-metric-label">vs. Traditional CNN Baseline · 4-Person Team</div>
+        </div>
+        <div class="proj-desc">Custom LIF-neuron spiking network with surrogate-gradient training, benchmarked on ASVspoof 2019 (LA) against a CNN baseline for energy-efficient, event-driven detection.</div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/Deep-Fake-Audio-Detection" target="_blank" rel="noopener">View code →</a>
+          <span class="proj-date">2025</span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Intelligent Product Recommendation System</div>
+          <span class="proj-tag tag-sde">SDE + ML</span>
+        </div>
+        <div>
+          <div class="proj-metric">NL→SQL</div>
+          <div class="proj-metric-label">+ RAG Recommendations</div>
+        </div>
+        <div class="proj-desc">Natural-language product search: LLM-generated SQL against PostgreSQL, grounded with ChromaDB few-shot retrieval, then LLM-ranked recommendations via Groq.</div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/Intelligent-Product-recommendation-System" target="_blank" rel="noopener">View code →</a>
+          <span class="proj-date">2025</span>
+        </div>
+        <div class="proj-foot" style="border-top:none; padding-top:0;">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/LLM-Driven-Cold-Start-E-Commerce-Recommender-Using-RAG-and-Vector-Embeddings" target="_blank" rel="noopener">Alt repo →</a>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Iterative AI: Pathfinding, Bayesian Reasoning &amp; MDP</div>
+          <span class="proj-tag tag-ml">ML</span>
+        </div>
+        <div>
+          <div class="proj-metric">3 Parts</div>
+          <div class="proj-metric-label">A* · Bayesian Belief · Value Iteration</div>
+        </div>
+        <div class="proj-desc">A*-based bots for dynamic grid navigation, Bayesian bots fusing probabilistic sensor input via 4D belief matrices, and an MDP-modeled herding task solved with value iteration.</div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/Iterative-AI-Projects-Pathfinding-Probabilistic-Sensing-and-Herding-main" target="_blank" rel="noopener">View code →</a>
+          <span class="proj-date">2025</span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Knowledge-Augmented Data Cleaning — NYC 311</div>
+          <span class="proj-tag tag-sde">SDE + ML</span>
+        </div>
+        <div>
+          <div class="proj-metric">Geo</div>
+          <div class="proj-metric-label">Validated · LLM-Assisted Correction</div>
+        </div>
+        <div class="proj-desc">Anomaly-detection pipeline for NYC 311 civic data, using GeoPandas/Shapely to validate records against official boundary shapefiles, with LLM-assisted correction of flagged anomalies.</div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/Knowledge-Augmented-Data-Cleaning-for-NYC-311-Service-Requests--main" target="_blank" rel="noopener">View code →</a>
+          <span class="proj-date">2025</span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">comma.ai Controls Challenge</div>
+          <span class="proj-tag tag-sde">SDE</span>
+        </div>
+        <div>
+          <div class="proj-metric">PID→Custom</div>
+          <div class="proj-metric-label">Lateral Control Tuning</div>
+        </div>
+        <div class="proj-desc">Designed and tuned a controller for comma.ai's open lateral-control challenge, optimizing steering commands against a neural-network vehicle physics simulator.</div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/COMMA.AI" target="_blank" rel="noopener">View code →</a>
+          <span class="proj-date">2025</span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Detecting Backdoor Attacks — Activation Clustering</div>
+          <span class="proj-tag tag-ml">ML</span>
+        </div>
+        <div>
+          <div class="proj-metric">92.5%</div>
+          <div class="proj-metric-label">Detection Accuracy</div>
+        </div>
+        <div class="proj-desc">Spectral Signature + Activation Clustering defenses identifying poisoned model activations, validated across ResNet18 and VGG architectures.</div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/DeepakChowdary9999/Multi-Layer-Activation-Clustering-for-Backdoor-Attack-Detection-master" target="_blank" rel="noopener">View code →</a>
+          <span class="proj-date">NOV 2024</span>
+        </div>
+      </div>
+
+      <div class="proj-card" data-tilt>
+        <div class="proj-head">
+          <div class="proj-title">Rescue Bot Simulation — Grid Navigation</div>
+          <span class="proj-tag tag-sde">SDE</span>
+        </div>
+        <div>
+          <div class="proj-metric">85%</div>
+          <div class="proj-metric-label">Rescue Success Rate</div>
+        </div>
+        <div class="proj-desc">Autonomous bot navigation across a 35×35 grid using probabilistic decision-making and A* pathfinding, with ROS-driven resource allocation.</div>
+        <div class="proj-foot">
+          <span class="proj-link disabled">Repo not linked</span>
+          <span class="proj-date">APR 2024</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Foundation</div>
+      <h2 class="sec-title">Education &amp; Certifications</h2>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-row">
+        <div>
+          <div class="edu-school">Rutgers University</div>
+          <div class="edu-meta">Master of Science, Computer Science · GPA 3.7/4.0</div>
+        </div>
+        <div class="edu-date">JAN 2024 — JAN 2026</div>
+      </div>
+      <ul class="cert-list">
+        <li>Detecting COVID-19 with Chest X-Ray using PyTorch</li>
+        <li>TensorFlow for AI: Applying Image Convolution</li>
+        <li>Improving Deep Neural Networks: Hyperparameter Tuning, Regularization and Optimization</li>
+        <li>Deep Learning with PyTorch: Generative Adversarial Networks</li>
+        <li>Introduction to Artificial Intelligence (AI)</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-cta">Let's build something reliable.</div>
+    <div class="foot-links">
+      <a class="btn ghost" href="mailto:deepaksai373@gmail.com">Email</a>
+      <a class="btn ghost" href="tel:+12015265561">+1 201-526-5561</a>
+      <a class="btn ghost" href="https://linkedin.com/in/deepak-sai-are-5b2bb31a0" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost" href="https://github.com/DeepakChowdary9999" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-note">East Orange, NJ &nbsp;·&nbsp; Built with care, 2026</div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Staggered reveal for grid children
+  const staggerIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      staggerIO.unobserve(e.target);
+      const kids = Array.from(e.target.children);
+      kids.forEach((k,i)=>{
+        k.style.opacity = '0';
+        k.style.transform = 'translateY(16px)';
+        k.style.transition = 'opacity .5s ease, transform .5s ease';
+        setTimeout(()=>{ k.style.opacity='1'; k.style.transform='none'; }, i*70);
+      });
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.skill-grid, .proj-grid').forEach(el=>staggerIO.observe(el));
+
+  // Spotlight follows cursor
+  const spotlight = document.getElementById('spotlight');
+  if(window.matchMedia('(pointer:fine)').matches){
+    window.addEventListener('mousemove', (e)=>{
+      spotlight.style.setProperty('--mx', e.clientX + 'px');
+      spotlight.style.setProperty('--my', e.clientY + 'px');
+    });
+  }
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const counters = document.querySelectorAll('.stat-num');
+  const countIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      countIO.unobserve(e.target);
+      const target = parseFloat(e.target.dataset.count);
+      if(prefersReduced){ e.target.textContent = target; return; }
+      const dur = 1100;
+      const t0 = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        e.target.textContent = Math.round(target * eased);
+        if(p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.4 });
+  counters.forEach(c=>countIO.observe(c));
+
+  if(!prefersReduced && window.matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('[data-tilt]').forEach(card=>{
+      card.addEventListener('mousemove', (e)=>{
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(600px) rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*4).toFixed(2)}deg) translateY(-2px)`;
+      });
+      card.addEventListener('mouseleave', ()=>{ card.style.transform = ''; });
+    });
+  }
+</script>
+
+</body>
+</html>
